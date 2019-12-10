@@ -1,0 +1,392 @@
+{%- comment -%}
+  This is a required section for the Shopify Theme Store.
+  It is available in the "Header" section in the theme editor.
+
+  Theme Store required settings
+  - Show announcement
+  - Text: message to announce
+  - Link: link of the announcement bar
+
+  Theme Store optional settings
+  - Home page only: only shows on the home page
+{%- endcomment -%}
+<section data-section-id="{{ section.id }}" data-section-type="header">
+  {%- if section.settings.announcement_bar_enabled -%}
+    <div class="announcement-bar">
+      <div>
+      {%- if section.settings.announcement_bar_home_page_only == false or template.name == 'index' -%}
+        {%- if section.settings.announcement_bar_link != blank -%}
+        <div class="announcement">
+            <img class="icon-png" src="{{ 'icon-angle-left-white.png' | asset_url }}">
+            <a href="{{ section.settings.announcement_bar_link }}">
+              {{ section.settings.announcement_bar_text | escape }}
+            </a>
+            <img class="icon-png" src="{{ 'icon-angle-right-white.png' | asset_url }}">
+          </div>
+          <img class="icon-png" src="{{ 'icon-close.png' | asset_url }}">
+        {%- else -%}
+          <p>{{ section.settings.announcement_bar_text | escape }}</p>
+        {%- endif -%}
+      {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <header class="row" role="banner">
+    <div class="medium-3 small-12 columns">
+    {% if template.name == 'index' %}
+      <h1>
+    {% else %}
+      <div class="h1">
+    {% endif %}
+        <a href="/" class="logo-image">
+          {% if section.settings.logo != blank %}
+            {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+            <img src="{{ section.settings.logo | img_url: image_size }}"
+                srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                alt="{{ section.settings.logo.alt | default: shop.name }}">
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+        </a>
+    {% if template.name == 'index' %}
+      </h1>
+    {% else %}
+      </div>
+    {% endif %}
+
+  </div>
+
+    <nav class="medium-6 small-12 columns navigation" role="navigation">
+      <ul>
+        {% assign i = 0 %}
+        {% for link in linklists[section.settings.menu].links %}
+        {% assign i = i | plus: 1 %}
+            <li{% if i == 1 %} class="has-mega"{% endif %}>
+              <a href="{{ link.url }}" {% if i == 1 %}onmouseout="removeOverlay();" onmouseover="showOverlay();"{% endif %}>
+                {{ link.title }}
+              </a>
+              {% if i == 1 %}
+                <img class="icon-png" src="{{ 'icon-angle-down.png' | asset_url }}">
+                <div class="mega-menu" onmouseout="removeOverlay();" onmouseover="showOverlay();">
+                  <div class="row">
+                    {% assign order = 'one, two, three, four' | split: ', ' %}
+                    {% for j in order %}
+                      <div class="medium-2 small-12 columns mega-{{ j }}">
+                        <h4>Label</h4>
+                        {% assign megaHandle = 'mega-menu-' | append: j %}
+                        {% for link in linklists[megaHandle].links %}
+                            <a href="{{ link.url }}">{{ link.title }}</a>
+                        {% endfor %}
+                      </div>
+                    {% endfor %}
+                    <div class="medium-4 small-12 columns cta" style="background-image: url({{'Group.jpg' | asset_url}})">
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              {% for childlink in link.links %}
+              <ul>
+
+                  <li>
+                    <a href="{{ childlink.url }}">
+                      {{ childlink.title }}
+                    </a>
+                  </li>
+
+              </ul>
+              {% endfor %}
+            </li>
+          {% else %}
+            <li>
+              <a href="{{ link.url }}">
+                {{ link.title }}
+              </a>
+            </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="medium-3 small-12 columns align-right">
+
+      <div class="login">
+        <a href="#">LOGIN</a>
+      </div>
+
+      <img class="icon-png search-icon" src="{{ 'icon-search.png' | asset_url }}">
+
+      <img class="icon-png heart-icon" src="{{ 'icon-heart.png' | asset_url }}">
+
+      <a href="/cart">
+        <img class="icon-png" src="{{ 'icon-cart.png' | asset_url }}">
+
+          <span{% if cart.item_count == 0 %} class="zero"{% endif %}>{{ cart.item_count }}</span>
+
+      </a>
+
+    </div>
+    </header>
+
+
+    <div class="row mobile" role="banner">
+      <div class="small-6 columns left">
+      {% if template.name == 'index' %}
+        <h1>
+      {% else %}
+        <div class="h1">
+      {% endif %}
+          <a href="/" class="logo-image">
+            {% if section.settings.logo != blank %}
+              {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+              <img src="{{ section.settings.logo | img_url: image_size }}"
+                  srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                  alt="{{ section.settings.logo.alt | default: shop.name }}">
+            {% else %}
+              {{ shop.name }}
+            {% endif %}
+          </a>
+      {% if template.name == 'index' %}
+        </h1>
+      {% else %}
+        </div>
+      {% endif %}
+
+    </div>
+
+    <div class="small-6 columns right">
+
+          <a href="/cart">
+            <img class="icon-png" src="{{ 'icon-cart.png' | asset_url }}">
+
+              <span class="cart-count{% if cart.item_count == 0 %} zero{% endif %}">{{ cart.item_count }}</span>
+
+          </a>
+
+          <img class="icon-png hamburger" src="{{ 'menu.png' | asset_url }}">
+
+    </div>
+
+
+      <nav class="small-12 columns mobile-mega" role="navigation">
+        <div class="top row">
+          <div class="small-12 columns">
+            {% if template.name == 'index' %}
+              <h1>
+            {% else %}
+              <div class="h1">
+            {% endif %}
+                <a href="/" class="logo-image">
+                  {% if section.settings.logo != blank %}
+                    {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+                    <img src="{{ section.settings.logo | img_url: image_size }}"
+                        srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                        alt="{{ section.settings.logo.alt | default: shop.name }}">
+                  {% else %}
+                    {{ shop.name }}
+                  {% endif %}
+                </a>
+            {% if template.name == 'index' %}
+              </h1>
+            {% else %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+          <div class="small-6 columns">
+            <img class="icon-png dark-close" src="{{ 'dark-close.png' | asset_url }}">
+          </div>
+        <ul>
+          {% assign i = 0 %}
+          {% for link in linklists[section.settings.menu].links %}
+          {% assign i = i | plus: 1 %}
+              <li{% if i == 1 %} class="has-mega-mobile"{% endif %}>
+                <a href="{{ link.url }}">
+                  {{ link.title }}
+                </a>
+                {% if i == 1 %}
+                  <span class="plus">+</span>
+                  <div class="mega-menu-mobile">
+                    <div class="row">
+                      {% assign order = 'one, two, three, four' | split: ', ' %}
+                      {% for j in order %}
+                        <div class="small-12 columns mega-{{ j }}">
+                          <h4>Label</h4>
+                          {% assign megaHandle = 'mega-menu-' | append: j %}
+                          {% for link in linklists[megaHandle].links %}
+                              <a href="{{ link.url }}">{{ link.title }}</a>
+                          {% endfor %}
+                        </div>
+                      {% endfor %}
+                      <div class="medium-4 small-12 columns cta" style="background-image: url({{'Group.jpg' | asset_url}})">
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                {% for childlink in link.links %}
+                <ul>
+
+                    <li>
+                      <a href="{{ childlink.url }}">
+                        {{ childlink.title }}
+                      </a>
+                    </li>
+
+                </ul>
+                {% endfor %}
+              </li>
+            {% else %}
+              <li>
+                <a href="{{ link.url }}">
+                  {{ link.title }}
+                </a>
+              </li>
+          {% endfor %}
+        </ul>
+
+        <div class="mobile-menu-bottom">
+
+          <div class="small-12 columns align-center">
+
+            <div class="mobile-icons">
+
+              <img class="icon-png search-icon" src="{{ 'icon-search.png' | asset_url }}">
+
+              <img class="icon-png heart-icon" src="{{ 'icon-heart.png' | asset_url }}">
+
+              <a href="/cart">
+                <img class="icon-png" src="{{ 'icon-cart.png' | asset_url }}">
+
+                <span class="cart-count{% if cart.item_count == 0 %} zero{% endif %}">{{ cart.item_count }}</span>
+
+              </a>
+
+            </div>
+
+            <div class="mobile-bottom">
+              <div class="login">
+                <a href="#">CONTACT</a>
+              </div>
+              <div class="login">
+                <a href="#">LOGIN</a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </nav>
+
+</div>
+
+</section>
+
+{% if section.settings.logo != blank %}
+  <style>
+    .logo-image {
+      display: block;
+      max-width: {{ section.settings.logo_max_width }}px;
+    }
+  </style>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Announcement bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_enabled",
+        "label": "Show announcement",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_home_page_only",
+        "label": "Show on home page only",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "announcement_bar_text",
+        "label": "Announcement text",
+        "default": "Announce something here"
+      },
+      {
+        "type": "url",
+        "id": "announcement_bar_link",
+        "label": "Announcement link",
+        "info": "Optional"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_max_width",
+        "min": 50,
+        "max": 450,
+        "step": 10,
+        "unit": "px",
+        "label": "Custom logo width",
+        "default": 250
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu",
+        "default": "main-menu"
+      }
+    ]
+  }
+{% endschema %}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if section.settings.logo %}
+    {% assign image_size = section.settings.logo.width | append:'x' %}
+    "logo": "https:{{ section.settings.logo | img_url: image_size }}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
+</script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}

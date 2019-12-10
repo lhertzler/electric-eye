@@ -1,0 +1,54 @@
+
+
+<section class="hero-banner" style="background-image: url({{ section.settings.image | img_url: '1600x' }})">
+
+    <div class="row align-left">
+      <div>
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.text }}</p>
+        <a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      </div>
+    </div>
+
+</section>
+
+{% schema %}
+  {
+    "name": "Hero Banner",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Large headline"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default": "Content for your hero section goes here."
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Hero Banner",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}

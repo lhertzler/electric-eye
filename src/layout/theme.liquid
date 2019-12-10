@@ -1,0 +1,83 @@
+<!doctype html>
+<html class="no-js supports-cookies" lang="{{ shop.locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_accent }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {%- endif -%}
+
+  {%- capture seo_title -%}
+    {{ page_title }}
+    {%- if current_tags -%}
+      {%- assign meta_tags = current_tags | join: ', ' -%} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+    {%- endif -%}
+    {%- if current_page != 1 -%}
+      &ndash; {{ 'general.meta.page' | t: page: current_page }}
+    {%- endif -%}
+    {%- assign escaped_page_title = page_title | escape -%}
+    {%- unless escaped_page_title contains shop.name -%}
+      &ndash; {{ shop.name }}
+    {%- endunless -%}
+  {%- endcapture -%}
+  <title>{{ seo_title | strip }}</title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300i,500&display=swap" rel="stylesheet">
+
+  {% include 'social-meta-tags' %}
+  <link type="text/css" href="{{ 'layout.theme.scss.css' | asset_url }}" rel="stylesheet">
+  {% include 'style-tags', layout: 'theme' %}
+  {% include 'css-variables' %}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', '');
+
+    window.theme = {
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }}
+      },
+      moneyFormat: {{ shop.money_format | json }}
+    };
+  </script>
+
+  {% include 'script-tags', layout: 'theme' %}
+  <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous">
+    </script>
+
+
+  {{ content_for_header }}
+</head>
+
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }}">
+
+  <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+  {% section 'header' %}
+
+  <main role="main" id="MainContent">
+    {{ content_for_layout }}
+  </main>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/shopify-cartjs/0.4.3/cart.min.js"></script>
+  <script type="text/javascript">
+      jQuery(function() {
+          CartJS.init({{ cart | json }});
+      });
+
+
+  </script>
+
+</body>
+</html>
