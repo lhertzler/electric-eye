@@ -34,7 +34,7 @@
     "@shopify/theme-variants": "^1.0.0-alpha.8",
     "foundation-sites": "^6.5.3",
     "install": "^0.13.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "lazysizes": "^4.1.1",
     "lodash-es": "^4.17.4",
     "normalize.css": "^7.0.0",
